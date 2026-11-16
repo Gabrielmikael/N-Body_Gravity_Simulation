@@ -1,0 +1,42 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class SimulationGUI implements SimulationListener {
+
+    private Simulation simulation;
+    private JFrame frame;
+    private DefaultListModel<String> bodyListModel;
+    private JList<String> bodyList;
+
+    public SimulationGUI(Simulation simulation) {
+        this.simulation = simulation;
+        simulation.addSimulationListener(this);
+
+        //making disolay
+        frame = new JFrame("Gravity Simulator");
+        frame.setSize(600, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        //list for bodies
+        bodyListModel = new DefaultListModel<>();
+        bodyList = new JList<>(bodyListModel);
+
+        frame.add(new JScrollPane(bodyList), BorderLayout.CENTER);
+
+        // making the buttons
+        JPanel buttonPanel = new JPanel();
+
+        JButton addPlanet = new JButton("Add Planet");
+        JButton addStar = new JButton("Add Star");
+        JButton removeBody = new JButton("Remove Body");
+        JButton startSimulation = new JButton("Start Simulation");
+
+        buttonPanel.add(addPlanet);
+        buttonPanel.add(addStar);
+        buttonPanel.add(removeBody);
+        buttonPanel.add(startSimulation);
+
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+    }
+}
