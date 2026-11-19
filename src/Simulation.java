@@ -7,6 +7,9 @@ public class Simulation {
     private List<SimulationListener> listeners = new ArrayList<>();
     private List<CelestialBody> bodies = new ArrayList<>();
 
+    private Integrator integrator = new EulerIntegration(); // default keeps old behavior
+
+
     public void addSimulationListener(SimulationListener listener) {
         if (listener == null) {
             throw new IllegalArgumentException("Listener cannot be null");
@@ -35,6 +38,13 @@ public class Simulation {
     public void removeBody(CelestialBody body) {
         bodies.remove(body);
         notifyListeners();
+    }
+
+    public void setIntegrator(Integrator integrator) {
+        if (integrator == null) {
+            throw new IllegalArgumentException("Integrator cannot be null");
+        }
+        this.integrator = integrator;
     }
 
     public List<CelestialBody> getBodies() {
@@ -70,19 +80,7 @@ public class Simulation {
             throw new IllegalArgumentException("Invalid time step.");
         }
 
-        List<CelestialBody> currentBodies = getBodies();
-        List<Vector3D> accelerations = calculateAccelerations(currentBodies);
-
-        // Update velocities
-        for (int i = 0; i < currentBodies.size(); i++) {
-            currentBodies.get(i).updateVelocity(accelerations.get(i), dt);
-        }
-
-        // Update positions
-        for (CelestialBody body : currentBodies) {
-            body.updatePosition(dt);
-        }
-
+        integrator.integrate(getBodies(), dt, this::calculateAccelerations);
         notifyListeners();
     }
 

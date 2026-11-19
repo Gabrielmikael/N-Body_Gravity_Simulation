@@ -1,3 +1,5 @@
+import java.util.stream.Gatherer;
+
 public abstract class CelestialBody {
 
     private double mass;
