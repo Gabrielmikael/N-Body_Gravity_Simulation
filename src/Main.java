@@ -1,3 +1,6 @@
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import javax.swing.SwingUtilities;
 
 public class Main {
 
@@ -33,30 +36,14 @@ public class Main {
         simulation.addBody(earth);
         simulation.addBody(mars);
 
-        // Run the simulation for ten steps
-        double dt = 3600; // One hour per step
-
-        for (int i = 1; i <= 10; i++) {
-            simulation.step(dt);
-
-            System.out.println("Step " + i);
-
-            for (CelestialBody body : simulation.getBodies()) {
-                Vector3D position = body.getPosition();
-
-                System.out.println(
-                        "Position: (" +
-                                position.getX() + ", " +
-                                position.getY() + ", " +
-                                position.getZ() + ")"
-                );
-            }
-
-            System.out.println();
-        }
-        // Launch the GUI using the same simulation
-        javax.swing.SwingUtilities.invokeLater(() -> {
+        // Launch the Java GUI
+        SwingUtilities.invokeLater(() -> {
             new SimulationGUI(simulation);
+        });
+
+        Platform.startup(() -> {
+            ThreeDView view = new ThreeDView(simulation);
+            view.start(new Stage());
         });
     }
 }
