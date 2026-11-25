@@ -7,8 +7,7 @@ public class Simulation {
     private List<SimulationListener> listeners = new ArrayList<>();
     private List<CelestialBody> bodies = new ArrayList<>();
 
-    private Integrator integrator = new EulerIntegration(); // default keeps old behavior
-
+    private Integrator integrator = new RK4Integrator(); //default is now RK4 (was Euler); the GUI also lets the user pick any method
 
     public void addSimulationListener(SimulationListener listener) {
         if (listener == null) {
